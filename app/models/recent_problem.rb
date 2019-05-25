@@ -1,0 +1,2 @@
+class RecentProblem < ApplicationRecord
+end
