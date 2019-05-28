@@ -1,6 +1,6 @@
 class UsersController < ApplicationController
     def follow
-        user = User.new(params.require(:user).permit(:name))
+        user = User.new(name: params[:name])
         if user.save
             # TODO: 成功メッセージ投稿
         else
@@ -16,4 +16,10 @@ class UsersController < ApplicationController
             # TODO: 失敗メッセージ投稿
         end
     end
+
+    def get_problems
+        User.initialize_user(4)
+    end
+
+    private
 end

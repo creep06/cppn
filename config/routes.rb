@@ -1,5 +1,9 @@
 Rails.application.routes.draw do
+  get 'recent_problems/create'
+  get 'recent_problems/destroy'
+  get 'problems/create'
+  get 'problems/destroy'
   get 'users/follow'
   get 'users/remove'
-  # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
+  get 'get', to: 'users#get_problems'
 end
