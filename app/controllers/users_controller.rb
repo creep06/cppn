@@ -18,7 +18,7 @@ class UsersController < ApplicationController
     end
 
     def get_problems
-        User.initialize_user(4)
+        User.initialize_user(5)
     end
 
     private
