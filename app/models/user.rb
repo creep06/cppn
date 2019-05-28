@@ -55,6 +55,11 @@ class User < ApplicationRecord
     end
 
 
+    def User.get_all_problems
+        User.find_each {|u| get_problems(u.id)}
+    end
+
+
     def User.initialize_user(id)
         get_problems(id, 1)
     end
