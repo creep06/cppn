@@ -84,9 +84,9 @@ GEM
     mini_portile2 (2.4.0)
     minitest (5.11.3)
     msgpack (1.2.10)
-    net-scp (1.2.1)
-      net-ssh (>= 2.6.5)
-    net-ssh (5.1.0)
+    net-scp (2.0.0)
+      net-ssh (>= 2.6.5, < 6.0.0)
+    net-ssh (5.2.0)
     nio4r (2.3.1)
     nokogiri (1.10.3)
       mini_portile2 (~> 2.4.0)
@@ -137,7 +137,7 @@ GEM
       activesupport (>= 4.0)
       sprockets (>= 3.0.0)
     sqlite3 (1.4.1)
-    sshkit (1.18.1)
+    sshkit (1.18.2)
       net-scp (>= 1.1.2)
       net-ssh (>= 2.8.0)
     thor (0.20.3)
@@ -154,22 +154,21 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  bootsnap (>= 1.1.0)
+  bootsnap
   byebug
   capistrano
   dotenv-rails
   listen (>= 3.0.5, < 3.2)
-  puma (~> 3.11)
-  rails (~> 5.2.2)
+  puma
+  rails
   rb-readline
   spring
   spring-watcher-listen (~> 2.0.0)
   sqlite3
-  tzinfo-data
   whenever
 
 RUBY VERSION
    ruby 2.5.0p0
 
 BUNDLED WITH
-   1.17.1
+   2.0.1
