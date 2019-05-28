@@ -4,7 +4,9 @@ require 'uri'
 class RecentProblem < ApplicationRecord
     belongs_to :user
 
+
     def RecentProblem.post_recent
+        # plist = {user_id: {'size(problems)', 'point(sum)', 'problem': [recentproblem_id]}}
         plist = {}
         User.find_each do |u|
             uid = u.id
@@ -58,28 +60,125 @@ class RecentProblem < ApplicationRecord
             cnt += 1
         end
 
+        res = post_to_slack(post.to_json)
+        logger.debug('リザルトコードは' + res.code + 'でした🚬')
+        RecentProblem.delete_all
+    end
+
+
+    def RecentProblem.post_daily_ranking
+        num = []
+        User.find_each do |u|
+            next if u.point_day == 0
+            hash = {}
+            hash['name'] = u.name
+            hash['point'] = u.point_day
+            hash['count'] = u.solved_day
+            num.push(hash)
+        end
+        return if num.empty?
+        num.sort_by! {|u| u['point']}.reverse!
+
+        hash2 = {}
+        hash2['title'] = '🌸 Daily Ranking 🌸'
+        hash2['value'] = ''
+        cnt = 1
+        num.each do |u|
+            hash2['value'] += "[#{cnt}] #{u['name']} - #{u['point']} points, #{u['count']} problem" + (u['count']==1 ? '' : 's') + "\n"
+            break if cnt == 10
+            cnt += 1
+        end
+        hash1 = {}
+        hash1['color'] = '#FA7C78'
+        hash1['fields'] = []
+        hash1['fields'].push(hash2)
+        post = {}
+        post['attachments'] = [hash1]
+
+        res = post_to_slack(post.to_json)
+        logger.debug('リザルトコードは' + res.code + 'でした🚬')
+        User.update_all(point_day: 0, solved_day: 0)
+    end
+
+
+    def RecentProblem.post_weekly_ranking
+        num = []
+        User.find_each do |u|
+            next if u.point_week == 0
+            hash = {}
+            hash['name'] = u.name
+            hash['point'] = u.point_week
+            hash['count'] = u.solved_week
+            num.push(hash)
+        end
+        return if num.empty?
+        num.sort_by! {|u| u['point']}.reverse!
+
+        hash2 = {}
+        hash2['title'] = '🍔 Weekly Ranking 🍔'
+        hash2['value'] = ''
+        cnt = 1
+        num.each do |u|
+            hash2['value'] += "[#{cnt}] #{u['name']} - #{u['point']} points, #{u['count']} problem" + (u['count']==1 ? '' : 's') + "\n"
+            break if cnt == 10
+            cnt += 1
+        end
+        hash1 = {}
+        hash1['color'] = '#FA6775'
+        hash1['fields'] = []
+        hash1['fields'].push(hash2)
+        post = {}
+        post['attachments'] = [hash1]
+
+        res = post_to_slack(post.to_json)
+        logger.debug('リザルトコードは' + res.code + 'でした🚬')
+        User.update_all(point_week: 0, solved_week: 0)
+    end
+
+
+    def RecentProblem.post_monthly_ranking
+        num = []
+        User.find_each do |u|
+            next if u.point_month == 0
+            hash = {}
+            hash['name'] = u.name
+            hash['point'] = u.point_month
+            hash['count'] = u.solved_month
+            num.push(hash)
+        end
+        return if num.empty?
+        num.sort_by! {|u| u['point']}.reverse!
+
+        hash2 = {}
+        hash2['title'] = '👑 Monthly Ranking 👑'
+        hash2['value'] = ''
+        cnt = 1
+        num.each do |u|
+            hash2['value'] += "[#{cnt}] #{u['name']} - #{u['point']} points, #{u['count']} problem" + (u['count']==1 ? '' : 's') + "\n"
+            break if cnt == 10
+            cnt += 1
+        end
+        hash1 = {}
+        hash1['color'] = '#F52549'
+        hash1['fields'] = []
+        hash1['fields'].push(hash2)
+        post = {}
+        post['attachments'] = [hash1]
+
+        res = post_to_slack(post.to_json)
+        logger.debug('リザルトコードは' + res.code + 'でした🚬')
+        User.update_all(point_month: 0, solved_month: 0)
+    end
+
+
+    def RecentProblem.post_to_slack body
         Dotenv.load
         uri = URI.parse(ENV['WEBHOOK_URL'])
         http = Net::HTTP.new(uri.host, uri.port)
         http.use_ssl = true
         http.verify_mode = OpenSSL::SSL::VERIFY_NONE
         req = Net::HTTP::Post.new uri.request_uri
-        req.body = post.to_json
-        res = http.request(req)
-        logger.debug('リザルトコードは' + res.code + 'でした🚬')
-
-        RecentProblem.delete_all
-    end
-
-
-    def RecentProblem.post_daily_ranking
-    end
-
-
-    def RecentProblem.post_weekly_ranking
-    end
-
-
-    def RecentProblem.post_monthly_ranking
+        req.body = body
+        http.request(req)
     end
 end
