@@ -1,5 +1,6 @@
 require 'net/http'
 require 'uri'
+require 'date'
 
 class RecentProblem < ApplicationRecord
     belongs_to :user
@@ -102,6 +103,8 @@ class RecentProblem < ApplicationRecord
 
 
     def RecentProblem.post_weekly_ranking
+        # 今日が日曜日であるときのみ実行
+        return if Date.today.wday != 0
         num = []
         User.find_each do |u|
             next if u.point_week == 0
@@ -137,6 +140,8 @@ class RecentProblem < ApplicationRecord
 
 
     def RecentProblem.post_monthly_ranking
+        # 今日が1日であるときのみ実行
+        return if Date.today.day != 1
         num = []
         User.find_each do |u|
             next if u.point_month == 0

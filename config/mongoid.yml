@@ -1,0 +1,7 @@
+production:
+  clients:
+    default:
+      uri: mongodb://heroku_xns90n38:l19bmvalail19s5nj6solm03bo@ds263816.mlab.com:63816/heroku_xns90n38
+
+      options:
+        connect_timeout: 15

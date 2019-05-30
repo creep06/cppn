@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
-# なぜかbuildpackが存在しないって言われるからver指定してない
-# ruby '2.5.0'
+# ibmcloudはrubyのver指定するとなぜかbuildpackが存在しないって言われる
+ruby '2.5.0'
 gem 'rails'
 gem 'puma'
 gem 'bootsnap', require: false
@@ -8,7 +8,8 @@ gem 'capistrano', require: false
 
 gem 'rb-readline'
 gem 'dotenv-rails'
-gem 'whenever', :require => false
+# heroku以外にデプロイするならこれが必要
+# gem 'whenever', :require => false
 
 group :development, :test do
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
