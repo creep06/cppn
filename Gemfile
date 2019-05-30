@@ -2,7 +2,6 @@ source 'https://rubygems.org'
 # なぜかbuildpackが存在しないって言われるからver指定してない
 # ruby '2.5.0'
 gem 'rails'
-gem 'sqlite3'
 gem 'puma'
 gem 'bootsnap', require: false
 gem 'capistrano', require: false
@@ -13,6 +12,7 @@ gem 'whenever', :require => false
 
 group :development, :test do
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
+  gem 'sqlite3'
 end
 
 group :development do

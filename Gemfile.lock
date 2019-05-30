@@ -167,8 +167,5 @@ DEPENDENCIES
   sqlite3
   whenever
 
-RUBY VERSION
-   ruby 2.5.0p0
-
 BUNDLED WITH
    2.0.1
