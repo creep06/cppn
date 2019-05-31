@@ -1,24 +1,6 @@
-# README
+# 機能
+- ユーザーのAtCoderへの提出を監視し、新しく問題をACしたらSlackに投稿する
+- 毎日/週/月解いた問題の総得点のランキングを投稿する
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
-
-Things you may want to cover:
-
-* Ruby version
-
-* System dependencies
-
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+# 導入方法
+いつか追記😉

@@ -10,16 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_05_26_041704) do
-
-  create_table "problems", force: :cascade do |t|
-    t.string "name"
-    t.string "url"
-    t.integer "point"
-    t.integer "user_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
+ActiveRecord::Schema.define(version: 2019_05_31_181411) do
 
   create_table "recent_problems", force: :cascade do |t|
     t.string "name"
@@ -43,6 +34,7 @@ ActiveRecord::Schema.define(version: 2019_05_26_041704) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "etag"
+    t.text "solved", default: ""
   end
 
 end

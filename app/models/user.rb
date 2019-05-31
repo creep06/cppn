@@ -2,7 +2,6 @@ require 'net/http'
 require 'uri'
 
 class User < ApplicationRecord
-    has_many :problems, dependent: :delete_all
     has_many :recent_problems, dependent: :delete_all
     validates :name, presence: true, uniqueness: true
 
@@ -22,19 +21,14 @@ class User < ApplicationRecord
 
         user.etag = res['etag']
         body = JSON.parse(res.body)
+        solved = user.solved
         body.each do |p|
             next if p['result'] != 'AC'
-            next if Problem.exists?(name: p['problem_id'], user_id: id)
+            next if solved.include?(p['problem_id'])
             next if (p['point']>2400) || ((p['point'].to_i%100) != 0)
-            pro = Problem.new
-            pro.name = p['problem_id']
-            pro.url = "https://atcoder.jp/#{p['contest_id']}/tasks/#{p['problem_id']}"
-            pro.point = p['point'].to_i
-            pro.user_id = id
-            if pro.save
-                user.point_total += pro.point
-                user.solved_total += 1
-            end
+            solved += ' ' + p['problem_id']
+            user.point_total += p['point']
+            user.solved_total += 1
             next if !mode.nil?
 
             rpro = RecentProblem.new
@@ -51,6 +45,7 @@ class User < ApplicationRecord
                 user.solved_day += 1
             end
         end
+        user.solved = solved
         user.save
     end
 

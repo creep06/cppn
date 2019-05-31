@@ -186,9 +186,4 @@ class RecentProblem < ApplicationRecord
         req.body = body
         http.request(req)
     end
-
-
-    def self.hello who
-        console.debug("Hello #{who}!")
-    end
 end

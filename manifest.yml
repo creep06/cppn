@@ -1,5 +1,0 @@
----
-applications:
-- name: cppn
-  random-route: true
-  memory: 256M
