@@ -51,7 +51,10 @@ class User < ApplicationRecord
 
 
     def User.get_all_problems
-        User.find_each {|u| get_problems(u.id)}
+        User.find_each do |u|
+            get_problems(u.id)
+            sleep(1)
+        end
     end
 
 
