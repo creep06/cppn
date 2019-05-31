@@ -5,21 +5,23 @@
 #   gem 'sqlite3'
 #
 default: &default
-  adapter: sqlite3
+  adapter: ibm_db
+  username: <%= ENV.fetch("DB2_USERNAME") %>
+  password: <%= ENV.fetch("DB2_PASSWORD") %>
+  database: <%= ENV.fetch("DB2_DBNAME") %>
+  host: <%= ENV.fetch("DB2_HOST") %>
+  port: <%= ENV.fetch("DB2_PORT") %>
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
   timeout: 5000
 
 development:
   <<: *default
-  database: db/development.sqlite3
 
 # Warning: The database defined as "test" will be erased and
 # re-generated from your development database when you run "rake".
 # Do not set this db to the same as development or production.
 test:
   <<: *default
-  database: db/test.sqlite3
 
 production:
   <<: *default
-  database: db/production.sqlite3
