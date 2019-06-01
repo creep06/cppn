@@ -7,9 +7,6 @@ class User < ApplicationRecord
 
 
     def self.pull(id, mode = nil)
-        Problem.pull
-        sleep(1)
-
         user = User.find(id)
         if (user.nil?)
             logger.debug('id:' + id + 'のユーザーはいねえ👺')
@@ -56,6 +53,8 @@ class User < ApplicationRecord
 
 
     def self.pull_all
+        Problem.pull
+        sleep(1)
         User.find_each do |u|
             pull(u.id)
             sleep(1)
@@ -64,6 +63,8 @@ class User < ApplicationRecord
 
 
     def self.initialize(id)
+        Problem.pull
+        sleep(1)
         pull(id, 1)
     end
 

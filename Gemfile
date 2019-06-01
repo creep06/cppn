@@ -6,8 +6,6 @@ gem 'bootsnap', require: false
 gem 'capistrano', require: false
 gem 'rb-readline'
 gem 'dotenv-rails'
-# heroku以外にデプロイするならこれが必要
-# gem 'whenever', :require => false
 
 group :development, :test do
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
