@@ -61,4 +61,16 @@ class User < ApplicationRecord
     def User.initialize_user(id)
         get_problems(id, 1)
     end
+
+
+    def self.post_to_slack body
+        Dotenv.load
+        uri = URI.parse(ENV['WEBHOOK_URL'])
+        http = Net::HTTP.new(uri.host, uri.port)
+        http.use_ssl = true
+        http.verify_mode = OpenSSL::SSL::VERIFY_NONE
+        req = Net::HTTP::Post.new uri.request_uri
+        req.body = body
+        http.request(req)
+    end
 end

@@ -4,6 +4,7 @@ require 'date'
 
 class RecentProblem < ApplicationRecord
     belongs_to :user
+    belongs_to :problem
 
 
     def RecentProblem.post_recent
