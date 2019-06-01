@@ -7,8 +7,8 @@ class RecentProblem < ApplicationRecord
     belongs_to :problem
 
 
-    def RecentProblem.post_recent
-        # plist = {user_id: {'size(problems)', 'point(sum)', 'problem': [recentproblem_id]}}
+    def self.post_recent
+        # plist = {user_id: {'size(problems)', 'point(sum)', 'problem': [problem_id]}}
         plist = {}
         User.find_each do |u|
             uid = u.id
@@ -18,15 +18,16 @@ class RecentProblem < ApplicationRecord
             plist[uid]['size'] = 0
             plist[uid]['point'] = 0
             plist[uid]['problem'] = []
-            pros.each do |p|
+            pros.each do |pro|
+                p = Problem.find(pro.problem_id)
                 plist[uid]['size'] += 1
                 plist[uid]['point'] += p.point
                 plist[uid]['problem'].push(p.id)
             end
             # 問題は点数の降順に並べる
             plist[uid]['problem'].sort! do |pid1, pid2|
-                pt1 = RecentProblem.find(pid1).point
-                pt2 = RecentProblem.find(pid2).point
+                pt1 = Problem.find(pid1).point
+                pt2 = Problem.find(pid2).point
                 pt2 <=> pt1
             end
         end
@@ -41,7 +42,14 @@ class RecentProblem < ApplicationRecord
         post = {}
         post['attachments'] = []
         colors = ['#86AC41', '34675C', '7DA3A1']
-        cnt = 0
+        scnt = Variable.find_by(key: 'last_post_color')
+        if scnt.nil?
+            scnt = Variable.new
+            scnt.key = 'last_post_color'
+            scnt.value = '0'
+            scnt.save
+        end
+        cnt = scnt.value.to_i
         plist.each do |uid,p|
             hash2 = {}
             hash2['title'] = "#{User.find(uid).name} solved #{p['size']} problem" + (p['size']==1 ? ', ' : 's, ') + "scoring #{p['point']} points!"
@@ -50,25 +58,27 @@ class RecentProblem < ApplicationRecord
                 hash2['value'] = 'This margin is too narrow to contain.'
             else
                 p['problem'].each do |pid|
-                    pro = RecentProblem.find(pid)
-                    hash2['value'] += "#{pro.point}pts - #{pro.name}\n#{pro.url}\n"
+                    pro = Problem.find(pid)
+                    hash2['value'] += "[#{pro.point}pts] #{Contest.find(pro.contest_id).name} #{pro.name}\n#{pro.url}\n"
                 end
             end
             hash1 = {}
             hash1['color'] = colors[cnt%3]
+            cnt += 1
             hash1['fields'] = []
             hash1['fields'].push(hash2)
             post['attachments'].push(hash1)
-            cnt += 1
         end
 
         res = post_to_slack(post.to_json)
         logger.debug('リザルトコードは' + res.code + 'でした🚬')
         RecentProblem.delete_all
+        scnt.value = cnt.to_s
+        scnt.save
     end
 
 
-    def RecentProblem.post_daily_ranking
+    def self.post_daily_ranking
         num = []
         User.find_each do |u|
             next if u.point_day == 0
@@ -103,7 +113,7 @@ class RecentProblem < ApplicationRecord
     end
 
 
-    def RecentProblem.post_weekly_ranking
+    def self.post_weekly_ranking
         # 今日が日曜日であるときのみ実行
         return if Date.today.wday != 0
         num = []
@@ -140,7 +150,7 @@ class RecentProblem < ApplicationRecord
     end
 
 
-    def RecentProblem.post_monthly_ranking
+    def self.post_monthly_ranking
         # 今日が1日であるときのみ実行
         return if Date.today.day != 1
         num = []
@@ -177,7 +187,7 @@ class RecentProblem < ApplicationRecord
     end
 
 
-    def RecentProblem.post_to_slack body
+    def self.post_to_slack body
         Dotenv.load
         uri = URI.parse(ENV['WEBHOOK_URL'])
         http = Net::HTTP.new(uri.host, uri.port)

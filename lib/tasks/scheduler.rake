@@ -1,5 +1,5 @@
 task :update => :environment do
-    User.get_all_problems
+    User.pull_all
 end
 
 task :post_hour => :environment do
