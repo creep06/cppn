@@ -39,7 +39,7 @@ class Problem < ApplicationRecord
             pro = Problem.new
             pro.name = p['title']
             pro.abbr = p['id']
-            pro.url = "https://atcoder.jp/#{con.abbr}/tasks/#{pro.abbr}"
+            pro.url = "https://atcoder.jp/contests/#{con.abbr}/tasks/#{pro.abbr}"
             pro.point = (p['point']=='null' ? 100 : p['point'].to_i)
             pro.contest_id = con.id
             pro.save
