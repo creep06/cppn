@@ -31,6 +31,10 @@ class User < ApplicationRecord
             pro = Problem.find_by(abbr: p['problem_id'])
             next if pro.nil?
             next if user.solved.include?(pro.abbr)
+            if pro.point != p['point']
+                pro.point = p['point'].to_i
+                pro.save
+            end
             user.solved += ' ' + pro.abbr
             user.point_total += pro.point
             user.solved_total += 1
