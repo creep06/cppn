@@ -4,6 +4,3 @@
 
 ## 導入方法
 いつか追記😉
-
-## ありがとうございます
-[AtCoderProblems](https://github.com/kenkoooo/AtCoderProblems)
