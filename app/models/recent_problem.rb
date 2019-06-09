@@ -95,8 +95,9 @@ class RecentProblem < ApplicationRecord
         hash2['title'] = '🌸 Daily Ranking 🌸'
         hash2['value'] = ''
         cnt = 1
+        last_point = -1
         num.each do |u|
-            hash2['value'] += "[#{cnt}] #{u['name']} - #{u['point']} points, #{u['count']} problem" + (u['count']==1 ? '' : 's') + "\n"
+            hash2['value'] += "[" + (u['point']==last_point ? "\"" : cnt.to_s) + "] #{u['name']} - #{u['point']} points, #{u['count']} problem" + (u['count']==1 ? '' : 's') + "\n"
             break if cnt == 10
             cnt += 1
         end
