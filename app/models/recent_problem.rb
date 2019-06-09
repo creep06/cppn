@@ -98,8 +98,9 @@ class RecentProblem < ApplicationRecord
         last_point = -1
         num.each do |u|
             hash2['value'] += "[" + (u['point']==last_point ? "\"" : cnt.to_s) + "] #{u['name']} - #{u['point']} points, #{u['count']} problem" + (u['count']==1 ? '' : 's') + "\n"
-            break if cnt == 10
+            break if cnt == 20
             cnt += 1
+            last_point = u['point']
         end
         hash1 = {}
         hash1['color'] = '#FA7C78'
@@ -133,10 +134,12 @@ class RecentProblem < ApplicationRecord
         hash2['title'] = '🍔 Weekly Ranking 🍔'
         hash2['value'] = ''
         cnt = 1
+        last_point = -1
         num.each do |u|
-            hash2['value'] += "[#{cnt}] #{u['name']} - #{u['point']} points, #{u['count']} problem" + (u['count']==1 ? '' : 's') + "\n"
-            break if cnt == 10
+            hash2['value'] += "[" + (u['point']==last_point ? "\"" : cnt.to_s) + "] #{u['name']} - #{u['point']} points, #{u['count']} problem" + (u['count']==1 ? '' : 's') + "\n"
+            break if cnt == 20
             cnt += 1
+            last_point = u['point']
         end
         hash1 = {}
         hash1['color'] = '#FA6775'
@@ -170,10 +173,12 @@ class RecentProblem < ApplicationRecord
         hash2['title'] = '👑 Monthly Ranking 👑'
         hash2['value'] = ''
         cnt = 1
+        last_point = -1
         num.each do |u|
-            hash2['value'] += "[#{cnt}] #{u['name']} - #{u['point']} points, #{u['count']} problem" + (u['count']==1 ? '' : 's') + "\n"
-            break if cnt == 10
+            hash2['value'] += "[" + (u['point']==last_point ? "\"" : cnt.to_s) + "] #{u['name']} - #{u['point']} points, #{u['count']} problem" + (u['count']==1 ? '' : 's') + "\n"
+            break if cnt == 20
             cnt += 1
+            last_point = u['point']
         end
         hash1 = {}
         hash1['color'] = '#F52549'
